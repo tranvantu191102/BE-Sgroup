@@ -1,4 +1,5 @@
 const router = require("express").Router();
+const { validate } = require("../middlewares/validate");
 
 let dataUser = [
   {
@@ -29,18 +30,12 @@ router.get("/user/:id", (req, res) => {
   });
 });
 
-router.put("/user/:id", (req, res) => {
+router.put("/user/:id", validate, (req, res) => {
   const { id } = req.params;
   const { fullname, gender, age } = req.body;
-
-  if (!fullname || !gender || !age) {
-    return res.json({
-      message: "Missing input",
-    });
-  }
-
   for (let i = 0; i < dataUser.length; ++i) {
     if (dataUser[i].id === +id) {
+      // dataUser[i] = { id, ...req.body };
       (dataUser[i].fullname = fullname),
         (dataUser[i].gender = gender),
         (dataUser[i].age = age);
@@ -52,13 +47,8 @@ router.put("/user/:id", (req, res) => {
   });
 });
 
-router.post("/user", (req, res) => {
+router.post("/user", validate, (req, res) => {
   const data = req.body;
-  if (!data.fullname || !data.gender || !data.age) {
-    return res.json({
-      message: "Missing input",
-    });
-  }
   const id = Math.floor(Math.random() * 100000);
   data.id = id;
   dataUser.push(data);
