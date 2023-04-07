@@ -9,12 +9,7 @@ function validate(req, res, next) {
   const regexName =
     /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+$/;
   const regexChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]+/;
-  if (!regexName.test(fullname)) {
-    return res.status(400).json({
-      message: "Name is wrong",
-    });
-  }
-  if (regexChar.test(fullname)) {
+  if (!regexName.test(fullname) || regexChar.test(fullname)) {
     return res.status(400).json({
       message: "Name is wrong",
     });
