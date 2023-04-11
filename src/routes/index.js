@@ -1,6 +1,6 @@
 const userRouter = require("./user");
 const routes = (app) => {
-  app.use(userRouter);
+  app.use("/user", userRouter);
 };
 
 module.exports = routes;

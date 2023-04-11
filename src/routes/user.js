@@ -16,7 +16,7 @@ let dataUser = [
   },
 ];
 
-router.get("/user", (req, res) => {
+router.get("/", (req, res) => {
   res.status(200).json({
     data: dataUser,
   });
@@ -30,7 +30,7 @@ router.get("/user/:id", (req, res) => {
   });
 });
 
-router.put("/user/:id", validate, (req, res) => {
+router.put("/:id", validate, (req, res) => {
   const { id } = req.params;
   const { fullname, gender, age } = req.body;
   for (let i = 0; i < dataUser.length; ++i) {
@@ -47,7 +47,7 @@ router.put("/user/:id", validate, (req, res) => {
   });
 });
 
-router.post("/user", validate, (req, res) => {
+router.post("/", validate, (req, res) => {
   const data = req.body;
   const id = Math.floor(Math.random() * 100000);
   data.id = id;
@@ -57,7 +57,7 @@ router.post("/user", validate, (req, res) => {
     data: data,
   });
 });
-router.delete("/user/:id", (req, res) => {
+router.delete("/:id", (req, res) => {
   const { id } = req.params;
   dataUser = dataUser.filter((item) => item.id !== +id);
   res.status(204);

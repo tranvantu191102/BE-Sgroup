@@ -1,7 +1,8 @@
 const express = require("express");
 const app = express();
-const routes = require("./src/routes");
-
+const routes = require("./routes");
+const configDatabase = require("./config/db.config");
+configDatabase();
 app.use(express.json());
 app.use(express.urlencoded());
 routes(app);
