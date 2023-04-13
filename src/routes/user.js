@@ -1,5 +1,7 @@
 const router = require("express").Router();
 const { validate } = require("../middlewares/validate");
+const connection = require("../database/connection");
+const { v4: uuidv4 } = require("uuid");
 
 let dataUser = [
   {
@@ -17,50 +19,72 @@ let dataUser = [
 ];
 
 router.get("/", (req, res) => {
-  res.status(200).json({
-    data: dataUser,
+  connection.query("select * from user", (err, results) => {
+    return res.status(200).json({
+      data: results,
+    });
   });
 });
 
-router.get("/user/:id", (req, res) => {
+router.get("/:id", (req, res) => {
   const { id } = req.params;
-  const user = dataUser.filter((item) => item.id === +id);
-  res.status(200).json({
-    data: user,
+  const query = `select * from user where user_id=${+id};`;
+  connection.query(query, (err, results) => {
+    return res.status(200).json({
+      data: results,
+    });
   });
 });
 
 router.put("/:id", validate, (req, res) => {
   const { id } = req.params;
   const { fullname, gender, age } = req.body;
-  for (let i = 0; i < dataUser.length; ++i) {
-    if (dataUser[i].id === +id) {
-      // dataUser[i] = { id, ...req.body };
-      (dataUser[i].fullname = fullname),
-        (dataUser[i].gender = gender),
-        (dataUser[i].age = age);
-      break;
-    }
-  }
-  return res.status(200).json({
-    message: dataUser,
+
+  const query = `update user set fullname=?, gender=?, age=? where user_id=${+id};`;
+  connection.query(query, [fullname, +gender, +age], (err, results) => {
+    return res.status(200).json({
+      data: results,
+    });
   });
 });
 
 router.post("/", validate, (req, res) => {
-  const data = req.body;
-  const id = Math.floor(Math.random() * 100000);
-  data.id = id;
-  dataUser.push(data);
+  const { fullname, age, gender } = req.body;
+  const id = Math.floor(Math.random() * 100000000);
 
-  res.status(201).json({
-    data: data,
-  });
+  connection.query(
+    `select * from user where user_id=${+id};`,
+    (err, result) => {
+      if (Object.keys(result).length === 0) {
+        connection.query(
+          "INSERT INTO user(user_id,fullname, gender, age) VALUES(?,?,?,?)",
+          [id, fullname, +gender, age],
+          (err, results) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+
+            return res.status(201).json({
+              message: "Created user",
+            });
+          }
+        );
+      } else {
+        return res.status(400).json({
+          message: "User exist",
+        });
+      }
+    }
+  );
 });
 router.delete("/:id", (req, res) => {
   const { id } = req.params;
-  dataUser = dataUser.filter((item) => item.id !== +id);
-  res.status(204);
+
+  const query = `delete from user where user_id=${+id};`;
+  connection.query(query, (err, results) => {
+    return res.status(200);
+  });
 });
 
 module.exports = router;
