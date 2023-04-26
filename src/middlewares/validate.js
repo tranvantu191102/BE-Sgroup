@@ -1,7 +1,7 @@
 function validate(req, res, next) {
-  const { fullname, gender, age } = req.body;
+  const { name, gender, age } = req.body;
 
-  if (!fullname || !gender || !age) {
+  if (!name || !gender || !age) {
     return res.status(400).json({
       message: "Missing input",
     });
@@ -9,7 +9,7 @@ function validate(req, res, next) {
   const regexName =
     /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]+$/;
   const regexChar = /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>~`\/?]+/;
-  if (!regexName.test(fullname) || regexChar.test(fullname)) {
+  if (!regexName.test(name) || regexChar.test(name)) {
     return res.status(400).json({
       message: "Name is wrong",
     });

@@ -4,6 +4,8 @@ const routes = require("./routes");
 const connection = require("./database/connection");
 require("dotenv").config();
 
+// console.log(process.env);
+
 const PORT = process.env.PORT || 8001;
 connection.connect(function (err) {
   if (err) throw err;
@@ -11,9 +13,9 @@ connection.connect(function (err) {
 });
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 routes(app);
 
 app.listen(PORT, () => {
-  console.log("running");
+  console.log(`Server is running at port ${PORT}`);
 });
