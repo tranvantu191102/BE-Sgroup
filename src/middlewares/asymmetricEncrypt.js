@@ -37,7 +37,7 @@ function decrypt(cipherText) {
 
 const encryptText = encrypt("Xu1234567890");
 const decryptText = decrypt(encryptText);
-console.log({
-  encryptText,
-  decryptText,
-});
+// console.log({
+//   encryptText,
+//   decryptText,
+// });

@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const { validate } = require("../middlewares/validate");
 const connection = require("../database/connection");
-const { verifyAccessToken } = require("../helpers/jwt");
+const { verifyAccessToken } = require("../middlewares/jwt");
 
 router.get("/", verifyAccessToken, (req, res) => {
   connection.query("SELECT * FROM users", (err, results) => {
