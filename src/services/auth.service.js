@@ -1,4 +1,3 @@
-const connection = require("../database/connection");
 const { comparePassword, hashPassword } = require("../helpers/hashing");
 const { signAccessToken } = require("../helpers/jwt");
 const { queryDB } = require("../helpers/queryConnection");
@@ -110,12 +109,12 @@ const handleForgotPassword = (emailTo) =>
   });
 
 const handleResetPassword = (email, passwordResetToken, newPassword) =>
-  new Promise((resolve, reject) => {
+  new Promise(async (resolve, reject) => {
     try {
       let userData = {};
       const querySelectUser =
         "SELECT * FROM users WHERE email = ? AND passwordResetToken = ? AND passwordResetExpiration >= ?";
-      const user = queryDB(querySelectUser, [
+      const user = await queryDB(querySelectUser, [
         email,
         passwordResetToken,
         new Date(),
@@ -129,7 +128,7 @@ const handleResetPassword = (email, passwordResetToken, newPassword) =>
         "UPDATE users SET password = ?, salt = ?, passwordResetToken = null, passwordResetExpiration = null, passwordLastResetDate = ? WHERE email = ?";
       const { hashedPassword, salt } = hashPassword(newPassword);
 
-      const userUpdated = queryDB(queryUpdateUser, [
+      const userUpdated = await queryDB(queryUpdateUser, [
         hashedPassword,
         salt,
         new Date(),
