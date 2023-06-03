@@ -18,6 +18,7 @@ const handleLogin = (username, password) =>
         const { password, ...user } = result[0];
         const payload = {
           username: user.username,
+          id: user.id,
         };
         const accessToken = signAccessToken(payload);
         userData = { accessToken, ...user };
