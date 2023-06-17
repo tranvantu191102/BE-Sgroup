@@ -260,6 +260,7 @@ const submitOption = (data) =>
             .insert({
               option_id: optionId,
               user_id: userId,
+              time_vote: new Date(),
             })
             .into("user_option")
             .then((result) => {
